@@ -45,7 +45,7 @@ with DAG(
     start_date=datetime(2023, 12, 4),  # 7 days ago
     catchup=True,
     tags=['demo'],
-    #max_active_runs=3,
+    max_active_runs=2,
     #concurrency=20,
 ) as dag:
 
