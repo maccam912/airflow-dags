@@ -46,7 +46,7 @@ with DAG(
     catchup=True,
     tags=['demo'],
     max_active_runs=2,
-    #concurrency=20,
+    concurrency=100,
 ) as dag:
 
     # Create tasks for each platform and genre combination
