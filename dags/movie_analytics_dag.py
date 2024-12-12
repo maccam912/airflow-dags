@@ -45,8 +45,6 @@ with DAG(
     start_date=datetime(2023, 12, 4),  # 7 days ago
     catchup=True,
     tags=['demo'],
-    max_active_runs=100,
-    concurrency=100,
 ) as dag:
 
     # Create tasks for each platform and genre combination
