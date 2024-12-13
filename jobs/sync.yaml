@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dags-sync-job
+  namespace: airflow
+spec:
+  template:
+    spec:
+      containers:
+      - name: git-sync
+        image: alpine/git
+        command:
+          - /bin/sh
+          - -c
+          - |
+            git clone --depth=1 https://github.com/maccam912/airflow-dags.git /mnt/dags && \
+            cd /mnt/dags && \
+            git pull
+        volumeMounts:
+        - name: dags-volume
+          mountPath: /mnt/dags
+      restartPolicy: Never
+      volumes:
+      - name: dags-volume
+        persistentVolumeClaim:
+          claimName: airflow-dags # Your CephFS PVC
