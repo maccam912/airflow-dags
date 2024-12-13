@@ -6,6 +6,8 @@ metadata:
 spec:
   template:
     spec:
+      nodeSelector:
+        system/nixos: "true"
       containers:
       - name: git-sync
         image: alpine/git
