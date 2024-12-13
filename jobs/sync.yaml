@@ -15,9 +15,9 @@ spec:
           - /bin/sh
           - -c
           - |
-            git clone --depth=1 https://github.com/maccam912/airflow-dags.git /mnt/dags && \
             cd /mnt/dags && \
-            git pull
+            rm -rf ./* && \
+            git clone --depth=1 https://github.com/maccam912/airflow-dags.git .
         volumeMounts:
         - name: dags-volume
           mountPath: /mnt/dags
