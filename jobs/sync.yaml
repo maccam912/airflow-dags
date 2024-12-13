@@ -1,28 +1,34 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: batch/v1beta1
+kind: CronJob
 metadata:
-  name: dags-sync-job
+  name: dags-sync-cronjob
   namespace: airflow
 spec:
-  template:
+  schedule: "*/5 * * * *"
+  jobTemplate:
     spec:
-      nodeSelector:
-        system/nixos: "true"
-      containers:
-      - name: git-sync
-        image: alpine/git
-        command:
-          - /bin/sh
-          - -c
-          - |
-            cd /mnt/dags && \
-            rm -rf ./* && \
-            git clone --depth=1 https://github.com/maccam912/airflow-dags.git .
-        volumeMounts:
-        - name: dags-volume
-          mountPath: /mnt/dags
-      restartPolicy: Never
-      volumes:
-      - name: dags-volume
-        persistentVolumeClaim:
-          claimName: airflow-dags # Your CephFS PVC
+      template:
+        spec:
+          nodeSelector:
+            system/nixos: "true"
+          containers:
+          - name: git-sync
+            image: alpine/git
+            command:
+              - /bin/sh
+              - -c
+              - |
+                cd /mnt/dags && \
+                if [ -d ".git" ]; then
+                  git pull
+                else
+                  git clone --depth=1 https://github.com/maccam912/airflow-dags.git .
+                fi
+            volumeMounts:
+            - name: dags-volume
+              mountPath: /mnt/dags
+          restartPolicy: Never
+          volumes:
+          - name: dags-volume
+            persistentVolumeClaim:
+              claimName: airflow-dags
