@@ -24,6 +24,7 @@ spec:
                 else
                   git clone --depth=1 https://github.com/maccam912/airflow-dags.git .
                 fi
+                sleep 100
             volumeMounts:
             - name: dags-volume
               mountPath: /mnt/dags
